@@ -138,15 +138,14 @@ app.route("/api/habits/done/:habitId").post(async (req, res) => {
   try {
     const decoded = helpers.verifyToken(token);
     const habitId = req.params.habitId;
+    const date = req.body.date;
     const userId = decoded;
     const foundUser = await helpers.findUser(userId);
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
     foundUser.habits = foundUser.habits.map((habit) =>
       habit._id === habitId
         ? {
             ...habit,
-            markedAsDone: habit.markedAsDone.concat(date.toISOString()),
+            markedAsDone: habit.markedAsDone.concat(date),
           }
         : habit
     );
